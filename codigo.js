@@ -140,30 +140,23 @@ play.onclick = ()=>{
 
 // Próxima
 
-proxima.onclick = ()=>{
-
+function proximaMusica(){
 
     if(modoAleatorio){
 
         let nova;
 
-
         do{
 
             nova = Math.floor(Math.random() * musicas.length);
 
-
         }while(nova === atual && musicas.length > 1);
-
 
         atual = nova;
 
-
     }else{
 
-
         atual++;
-
 
         if(atual >= musicas.length){
 
@@ -173,11 +166,13 @@ proxima.onclick = ()=>{
 
     }
 
-
     tocar();
 
+}
 
-};
+proxima.onclick = proximaMusica;
+
+audio.addEventListener("ended", proximaMusica);
 
 
 
