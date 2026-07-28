@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MusicBox</title>
+<link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+<div class="player">
+
+    <h1>🎵 MusicBox</h1>
+
+
+    <label class="botao">
+
+        📂 Escolher músicas
+
+        <input 
+        type="file" 
+        id="seletor"
+        webkitdirectory
+        multiple
+        accept="audio/*">
+
+    </label>
+
+
+    <h2 id="nomeMusica">
+        Nenhuma música selecionada
+    </h2>
+
+
+    <audio id="audio"></audio>
+
+  <div class="controles">
+
+    <button id="aleatorio">
+        🔀
+    </button>
+
+    <button id="anterior">
+        ⏮️
+    </button>
+
+    <button id="play">
+        ▶️
+    </button>
+
+    <button id="proxima">
+        ⏭️
+    </button>
+
+    <button id="repetir">
+        🔁
+    </button>
+
+</div>
+
+
+    <h2>
+        Biblioteca
+    </h2>
+
+
+    <div id="lista">
+
+    </div>
+
+
+</div>
+
+
+<script src="codigo.js"></script>
+
+</body>
+
+</html>

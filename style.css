@@ -1,0 +1,106 @@
+*{
+    box-sizing: border-box;
+}
+
+
+body{
+
+    margin:0;
+
+    height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#111;
+
+    color:white;
+
+    font-family:Arial;
+
+}
+
+
+
+.player{
+
+    width:350px;
+
+    background:#222;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+}
+
+
+
+.botao{
+
+    display:block;
+
+    background:#444;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+
+
+.botao input{
+
+    display:none;
+
+}
+
+
+
+button{
+
+    font-size:25px;
+
+    margin:10px;
+
+    border:0;
+
+    border-radius:50%;
+
+    padding:10px;
+
+    cursor:pointer;
+
+}
+
+
+
+#lista div{
+
+    background:#333;
+
+    padding:10px;
+
+    margin:8px 0;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+
+
+#lista div:hover{
+
+    background:#555;
+
+}
