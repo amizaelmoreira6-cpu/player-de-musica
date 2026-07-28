@@ -26,7 +26,11 @@ const aleatorio = document.getElementById("aleatorio");
 
 const repetir = document.getElementById("repetir");
 
+const barra = document.getElementById("barra");
 
+const tempoAtual = document.getElementById("tempoAtual");
+
+const tempoTotal = document.getElementById("tempoTotal");
 
 // Escolher pasta
 
@@ -83,7 +87,13 @@ musicas = Array.from(seletor.files)
 });
 
 
+audio.onloadedmetadata = () => {
 
+    barra.max = audio.duration;
+
+    tempoTotal.innerHTML = formatarTempo(audio.duration);
+
+};
 
 // Tocar música
 
@@ -140,7 +150,37 @@ play.onclick = ()=>{
 
 };
 
+audio.ontimeupdate = () => {
 
+    barra.value = audio.currentTime;
+
+    tempoAtual.innerHTML =
+        formatarTempo(audio.currentTime);
+
+};
+barra.oninput = () => {
+
+    audio.currentTime = barra.value;
+
+};
+
+function formatarTempo(segundos){
+
+    segundos = Math.floor(segundos);
+
+    let minutos = Math.floor(segundos / 60);
+
+    let resto = segundos % 60;
+
+    if(resto < 10){
+
+        resto = "0" + resto;
+
+    }
+
+    return minutos + ":" + resto;
+
+}
 
 // Próxima
 
