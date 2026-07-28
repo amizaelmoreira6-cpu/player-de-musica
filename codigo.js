@@ -32,10 +32,120 @@ const tempoAtual = document.getElementById("tempoAtual");
 
 const tempoTotal = document.getElementById("tempoTotal");
 
+function carregarMusicas(){
+
+    let transacao = banco.transaction(
+        "musicas",
+        "readonly"
+    );
+
+
+    let tabela = transacao.objectStore("musicas");
+
+
+    let pedido = tabela.getAll();
+
+
+    pedido.onsuccess = ()=>{
+
+
+        musicas = pedido.result;
+
+
+        lista.innerHTML="";
+
+
+        musicas.forEach((musica,index)=>{
+
+
+            let item = document.createElement("div");
+
+
+            item.innerHTML = musica.nome;
+
+
+            item.onclick=()=>{
+
+                atual=index;
+
+                tocar();
+
+            };
+
+
+            lista.appendChild(item);
+
+
+        });
+
+
+        console.log("Músicas carregadas");
+
+    };
+
+}
+function abrirBanco() {
+
+    const requisicao = indexedDB.open("MusicBoxDB", 1);
+
+    requisicao.onupgradeneeded = (evento) => {
+
+        banco = evento.target.result;
+
+        let tabela = banco.createObjectStore("musicas", {
+    keyPath: "id",
+    autoIncrement: true
+});
+
+tabela.createIndex("nome", "nome");
+    };
+
+ requisicao.onsuccess = (evento) => {
+
+    banco = evento.target.result;
+
+    console.log("Banco aberto!");
+
+    carregarMusicas();
+
+};
+
+    requisicao.onerror = () => {
+
+        console.log("Erro ao abrir o banco.");
+
+    };
+
+}
+function salvarNoBanco(listaMusicas){
+
+    let transacao = banco.transaction(
+        "musicas",
+        "readwrite"
+    );
+
+    let tabela = transacao.objectStore("musicas");
+
+
+    listaMusicas.forEach(musica=>{
+
+        tabela.add({
+
+    nome: musica.nome,
+
+    arquivo: musica.arquivo
+
+});
+
+    });
+
+
+    console.log("Músicas salvas!");
+
+}
 // Escolher pasta
 
 seletor.addEventListener("change", ()=>{
-
 musicas = Array.from(seletor.files)
 .filter(arquivo => {
 
@@ -54,8 +164,16 @@ musicas = Array.from(seletor.files)
         "ogg"
     ].includes(extensao);
 
-});
+})
+.map(arquivo => {
 
+    return {
+        nome: arquivo.name,
+        arquivo: arquivo
+    };
+
+});
+    
 
     lista.innerHTML="";
 
@@ -82,7 +200,7 @@ musicas = Array.from(seletor.files)
 
 
     });
-
+salvarNoBanco(musicas);
 
 });
 
@@ -104,9 +222,34 @@ function tocar(){
 if(audio.src){
     URL.revokeObjectURL(audio.src);
 }
+function tocar(){
+
+    if(musicas.length === 0) return;
+
+
+    if(audio.src){
+        URL.revokeObjectURL(audio.src);
+    }
+
+
     let arquivo = URL.createObjectURL(
-        musicas[atual]
+        musicas[atual].arquivo
     );
+
+
+    audio.src = arquivo;
+
+
+    nomeMusica.innerHTML =
+    musicas[atual].nome;
+
+
+    audio.play();
+
+
+    play.innerHTML="⏸️";
+
+}
 
 
     audio.src = arquivo;
@@ -124,6 +267,23 @@ if(audio.src){
 
 }
 
+function formatarTempo(segundos){
+
+    segundos = Math.floor(segundos);
+
+    let minutos = Math.floor(segundos / 60);
+
+    let resto = segundos % 60;
+
+    if(resto < 10){
+
+        resto = "0" + resto;
+
+    }
+
+    return minutos + ":" + resto;
+
+}
 
 
 // Play/Pause
@@ -150,37 +310,6 @@ play.onclick = ()=>{
 
 };
 
-audio.ontimeupdate = () => {
-
-    barra.value = audio.currentTime;
-
-    tempoAtual.innerHTML =
-        formatarTempo(audio.currentTime);
-
-};
-barra.oninput = () => {
-
-    audio.currentTime = barra.value;
-
-};
-
-function formatarTempo(segundos){
-
-    segundos = Math.floor(segundos);
-
-    let minutos = Math.floor(segundos / 60);
-
-    let resto = segundos % 60;
-
-    if(resto < 10){
-
-        resto = "0" + resto;
-
-    }
-
-    return minutos + ":" + resto;
-
-}
 
 // Próxima
 
@@ -287,6 +416,27 @@ repetir.onclick = ()=>{
     }
 
 };
+audio.onloadedmetadata = () => {
+
+    barra.max = audio.duration;
+
+    tempoTotal.innerHTML = formatarTempo(audio.duration);
+
+};
+audio.ontimeupdate = () => {
+
+    barra.value = audio.currentTime;
+
+    tempoAtual.innerHTML =
+        formatarTempo(audio.currentTime);
+
+};
+barra.oninput = () => {
+
+    audio.currentTime = barra.value;
+
+};
+abrirBanco();
 if ("serviceWorker" in navigator) {
 
     navigator.serviceWorker.register("service-worker.js");
