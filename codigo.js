@@ -1,3 +1,4 @@
+//
 let banco;
 
 let musicas = [];
@@ -31,7 +32,7 @@ const barra = document.getElementById("barra");
 const tempoAtual = document.getElementById("tempoAtual");
 
 const tempoTotal = document.getElementById("tempoTotal");
-
+//variaveis global
 function carregarMusicas(){
 
     let transacao = banco.transaction(
@@ -142,8 +143,8 @@ function atualizarLista(){
     });
 
 }
-// Escolher pasta
-
+//banco de dados
+//
 seletor.addEventListener("change", ()=>{
 musicas = Array.from(seletor.files)
 .filter(arquivo => {
@@ -180,10 +181,9 @@ musicas = Array.from(seletor.files)
 salvarNoBanco(musicas);
 
 });
-
+//escolher basta
 
 // Tocar música
-
 function tocar(){
 
     if(musicas.length === 0) return;
@@ -205,7 +205,6 @@ musicas[atual].nome;
 
     play.innerHTML = "⏸️";
 }
-
 function formatarTempo(segundos){
 
     segundos = Math.floor(segundos);
@@ -223,10 +222,7 @@ function formatarTempo(segundos){
     return minutos + ":" + resto;
 
 }
-
-
 // Play/Pause
-
 play.onclick = ()=>{
 
 
@@ -248,10 +244,7 @@ play.onclick = ()=>{
 
 
 };
-
-
 // Próxima
-
 function proximaMusica(){
 
     if(modoAleatorio){
@@ -281,16 +274,9 @@ function proximaMusica(){
     tocar();
 
 }
-
 proxima.onclick = proximaMusica;
-
-
-
-
 // Anterior
-
 anterior.onclick = ()=>{
-
 
     atual--;
 
@@ -303,8 +289,6 @@ anterior.onclick = ()=>{
 
 
     tocar();
-
-
 };
 audio.onended = () => {
 
@@ -320,6 +304,7 @@ audio.onended = () => {
     }
 
 };
+//aleatorio
 aleatorio.onclick = ()=>{
 
     modoAleatorio = !modoAleatorio;
@@ -336,9 +321,8 @@ aleatorio.onclick = ()=>{
     }
 
 };
-
-
-
+//
+//repetir
 repetir.onclick = ()=>{
 
     modoRepetir = !modoRepetir;
@@ -355,6 +339,7 @@ repetir.onclick = ()=>{
     }
 
 };
+//
 audio.onloadedmetadata = () => {
 
     barra.max = audio.duration;
