@@ -89,7 +89,11 @@ musicas = Array.from(seletor.files)
 
 function tocar(){
 
+    if(musicas.length === 0) return;
 
+if(audio.src){
+    URL.revokeObjectURL(audio.src);
+}
     let arquivo = URL.createObjectURL(
         musicas[atual]
     );
@@ -172,7 +176,6 @@ function proximaMusica(){
 
 proxima.onclick = proximaMusica;
 
-audio.addEventListener("ended", proximaMusica);
 
 
 
@@ -197,20 +200,16 @@ anterior.onclick = ()=>{
 };
 audio.onended = () => {
 
-
     if(modoRepetir){
 
         audio.currentTime = 0;
-
         audio.play();
-
 
     }else{
 
-        proxima();
+        proximaMusica();
 
     }
-
 
 };
 aleatorio.onclick = ()=>{
