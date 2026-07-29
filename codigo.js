@@ -103,7 +103,6 @@ function salvarNoBanco(listaMusicas){
 
     let tabela = transacao.objectStore("musicas");
 
-tabela.clear();
 
     listaMusicas.forEach(musica=>{
 
@@ -119,6 +118,12 @@ tabela.clear();
 
 
     console.log("Músicas salvas!");
+
+}
+//verifica se a musica ja existe
+function existeMusica(nome){
+
+    return musicas.some(musica => musica.nome === nome);
 
 }
 function atualizarLista(){
@@ -146,7 +151,7 @@ function atualizarLista(){
 //banco de dados
 //
 seletor.addEventListener("change", ()=>{
-musicas = Array.from(seletor.files)
+const novasMusicas = Array.from(seletor.files)
 .filter(arquivo => {
 
     const extensao = arquivo.name
@@ -173,13 +178,23 @@ musicas = Array.from(seletor.files)
     };
 
 });
-    
+const musicasNovas = [];
 
- atualizarLista();
+novasMusicas.forEach(musica => {
 
+    if(!existeMusica(musica.nome)){
 
-salvarNoBanco(musicas);
+        musicas.push(musica);
 
+        musicasNovas.push(musica);
+
+    }
+
+});
+
+atualizarLista();
+
+salvarNoBanco(musicasNovas);
 });
 //escolher basta
 
